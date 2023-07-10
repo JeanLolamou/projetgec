@@ -1,0 +1,17 @@
+Plate forme Unifiées
+Remarques: 
+Revoir les icones
+
+Date enregistrement au lieu de reception
+
+Supprimé N°courriers
+
+Supprimé: références, email, tel, action, enregistrer décharge
+
+Ordre colonne: date enreg, origine; date annotation 
+
+Rajouter les pilbox (multiSelect)
+
+Insérer date annotation
+
+Changer la position commentaire

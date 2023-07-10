@@ -1,0 +1,95 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use DB;
+class LiveSearch extends Controller
+{
+    function index(){
+ $courrier10 = DB::table('ajout_courriers')->where('supprimer',0)->orderBy('id_courrier', 'DESC')->get();
+
+    	return view('Backend/pages/search',compact('courrier10'));
+    }
+
+    function action(Request $request)
+    {
+        if($request->ajax())
+        {
+            $query=$request->get('query');
+            if($query != '')
+            {
+                    $data=DB::table('ajout_courriers')
+                    ->where('numero','like','%'.$query.'%')
+                    ->orWhere('objet','like','%'.$query.'%')
+                    ->orderBy('id_courrier','desc')
+                    ->get();
+            }
+            else{
+
+            	$data=DB::table('ajout_courriers')
+            	->orderBy('id_courrier','desc')
+            	->get();
+            }
+            $total_row= $data->count();
+            if($total_row >0 ){
+                foreach($data as $row)
+                {
+                	$output.='
+                	<tr>
+                      <td>'.$row->numero.'</td>
+                       <td>'.$row->objet.'</td>
+                	</tr>
+                 
+                	';
+                }
+          } else{
+
+            	$output='
+                    <tr> <td align="center" colspan="5"> No data Found    </td>
+                                                        </tr>
+            	';
+            }
+            $data= array(
+
+            	'table_data'  => $output,
+                 'tatal_data' => $total_data);
+            echo json_encode($data);
+
+        }
+            
+    }
+}
+
+
+
+
+
+
+
+
+
+search
+
+<script >
+          fetch_customer_data();
+          $(document).ready(function(){
+          function fetch_customer_data(query='')
+          {
+            $.ajax({
+              url:"{{route('Live_search.action')}}",
+              method:'GET',
+              data:{query:query},
+              dataType:'json'
+              success:function(data)
+              {
+
+                $('tbody').html(data.table_data);
+                $('#total_records').text(data.total_data);
+              }
+
+            })
+          }
+
+                   });
+        </script>
